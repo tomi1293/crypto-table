@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useEffect } from 'react';
+import { CryptoRow } from './CryptoRow';
 
 export const Crypto = () => {
 
     const [search, setSearch] = useState("");
-    const [cryptos, setCryptos] = useState([]); 
+    const [cryptos, setCryptos] = useState([]);
+    const [orderFlag, setOrderFlag] = useState(false);
 
     const endpoint = 'https://api.coingecko.com/api/v3/coins';
     
@@ -18,7 +20,6 @@ export const Crypto = () => {
 
     useEffect(() => {
         showData();
-
     }, [])
     
     const handleSearch = (e) => {
@@ -42,21 +43,11 @@ export const Crypto = () => {
                 </thead>
                 <tbody>
                     {
-                        results.map( data => (
-                            <tr key={data.id}>
-                                <td>{data.market_data.market_cap_rank}</td>
-                                <td><small><img src={data.image.small} alt="" />{data.name}</small></td>
-                                <td>{data.symbol.toUpperCase()}</td>
-                                <td>{data.market_data.current_price.bmd.toFixed(2)}</td>
-                                <td>
-                                    {
-                                        data.market_data.price_change_percentage_24h < 0 
-                                            ?(<span className='badge bg-danger'>{data.market_data.price_change_percentage_24h}</span>)
-                                            :(<span className='badge bg-success'>{data.market_data.price_change_percentage_24h}</span>)
-                                    }
-                                </td>
-                            </tr>
-                        ))
+                            results.map( data => (
+                                <tr key={data.id}>
+                                    <CryptoRow data={data}/>
+                                </tr>
+                            ))
                     }
                 </tbody>
 
